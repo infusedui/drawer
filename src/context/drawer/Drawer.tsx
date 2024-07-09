@@ -7,6 +7,8 @@ import {
 } from "react";
 import { ContextProps, ProviderProps } from "./Drawer.types";
 import { AnimatePresence, motion } from "framer-motion";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 import "./Drawer.scss";
 
 const defaultDrawerContent: (element: React.ReactNode) => void = (
@@ -49,7 +51,11 @@ const DrawerProvider: React.FC<ContextProps> = ({ children }) => {
                 exit={{ opacity: 0, y: 40 }}
                 className="drawer-container"
               >
-                {drawerContentRef.current as unknown as React.ReactNode}
+                <SimpleBar style={{ maxHeight: "60vh" }}>
+                  <div className="drawer-content">
+                    {drawerContentRef.current as unknown as React.ReactNode}
+                  </div>
+                </SimpleBar>
               </motion.div>
             )}
           </AnimatePresence>
@@ -68,6 +74,7 @@ export const useDrawer = () => {
   return {
     pushContent: useCallback<(element: React.ReactNode) => React.ReactNode>(
       (element: React.ReactNode): React.ReactNode => {
+        drawerContentRef.current = element;
         return;
       },
       [drawerContentRef]
